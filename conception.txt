@@ -1,0 +1,9 @@
+two apps:
+- objects + sending data via IP (C++/Eclipse)
+- location info reveicer + print location info in console (Python/some IDE)
+
+objects-pos-projekt:
+generates a set of objects (ships/planes/cars) as seperate threads, which move (basic version includes one static object) and send their location information via IP to the receiver (basic version involves printing location info in console).
+
+receiver-pos-projekt:
+receives location info sent by threads in the "objects" app and prints it out to console/text file. 
