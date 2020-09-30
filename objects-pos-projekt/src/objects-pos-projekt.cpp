@@ -13,6 +13,6 @@ using namespace std;
 
 int main() {
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
-	cout<<"plz pull this from origin why doesnt it work god damn it"<<endl //my patience is being tested
+	cout<<"plz pull this from origin why doesnt it work god damn it"<<endl; //my patience is being tested
 	return 0;
 }
