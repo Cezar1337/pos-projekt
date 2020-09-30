@@ -33,6 +33,7 @@ int main () {
 
       if (rc) {
          cout << "Error:unable to create thread," << rc << endl;
+         cout<<"No nie działa"<<endl;
          exit(-1);
       }
    }
