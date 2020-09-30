@@ -1,9 +1,9 @@
 //============================================================================
 // Name        : objects-pos-projekt.cpp
-// Author      : Cezary Kiedrowski
-// Version     :
+// Author      : Cezary Kiedrowski, Arkadiusz Dumin
+// Version     : alpha lol
 // Copyright   : 
-// Description : Hello World in C++, Ansi-style
+// Description : Several objects on a 2d map, sending location info via IP
 //============================================================================
 
 #include <iostream>
