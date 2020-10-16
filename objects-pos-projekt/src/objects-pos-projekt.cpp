@@ -17,12 +17,13 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <unistd.h>
-
+#include <arpa/inet.h>
 
 using namespace std;
 
 #define MOJ_PORT 4040
-#define OCZEKUJACE 2
+#define OCZEKUJACE 1
+#define ADRES_IP "192.168.2.1"
 
 struct polozenie
 {
@@ -107,9 +108,9 @@ void serwer_uruchomienie(){
 		cout<<"Wywolano setsockopt() powiodlo sie"<<endl;
 	}
 
-	moj_adres.sin_family = PF_INET;
+	moj_adres.sin_family = AF_INET;
 	moj_adres.sin_port = htons(MOJ_PORT);
-	moj_adres.sin_addr.s_addr = INADDR_ANY;
+	moj_adres.sin_addr.s_addr = inet_addr(ADRES_IP);
 	memset(&(moj_adres.sin_zero), '\0', 8);
 
 	if(bind(sockfd, (struct sockaddr *)&moj_adres, sizeof(struct sockaddr))== -1){
@@ -118,7 +119,7 @@ void serwer_uruchomienie(){
 	}
 	else
 	{
-		cout<<"Wywolano bind powiodlo sie"<<endl;
+		cout<<"Wywolano bind() powiodlo sie"<<endl;
 	}
 
 	if (listen(sockfd, OCZEKUJACE) == -1){
@@ -134,24 +135,43 @@ void serwer_uruchomienie(){
 
 	cout<<"Aktualnie dziala do momentu przed polaczeniem"<<endl;
 
-	while(1)
-	{
+
 		if((new_fd = accept(sockfd,(struct sockaddr *)&klient_adres, &sin_rozmiar )) == -1)
 		{
 			cout<<"Blad accept"<<endl;
-			continue;
+
+		}
+		else
+		{
+			cout<<"Polaczono, accept() dziala"<<endl;
 		}
 
-		cout<<"Polaczono"<<endl;
 		//pytanie czy ten fork cały
 		close(sockfd);
-		polozenie obiekt = stworzenie_struktury();
+	/*	polozenie obiekt = stworzenie_struktury();
 		if(send_temp(new_fd,&obiekt) == -1)
 		{
 			cout<<"Wysylanie blad"<<endl;
 		}
+	*/
+	int i = 1;
+	while(1)
+	{
 
+		if(send(new_fd, "hello, world!\n", 14, 0) == -1)
+		{
+			cout<<"Blad wysylania"<<endl;
+		}
+
+		else
+		{
+			cout<<"Wyslano wiadomosc po raz: "<<i<<endl;
+			i++;
+			sleep(1);
+		}
 	}
+
+	close(new_fd);
 
 }
 
