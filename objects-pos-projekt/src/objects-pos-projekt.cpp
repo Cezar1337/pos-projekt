@@ -115,6 +115,7 @@ void serwer_uruchomienie(){
 
 	if(bind(sockfd, (struct sockaddr *)&moj_adres, sizeof(struct sockaddr))== -1){
 		cout<<"Blad bind"<<endl;
+		close(sockfd);
 		exit(1);
 	}
 	else
@@ -124,6 +125,7 @@ void serwer_uruchomienie(){
 
 	if (listen(sockfd, OCZEKUJACE) == -1){
 		cout<<"Blad bind"<<endl;
+		close(sockfd);
 		exit(1);
 	}
 	else
