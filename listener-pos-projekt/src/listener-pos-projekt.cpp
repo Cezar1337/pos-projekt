@@ -24,6 +24,34 @@ using namespace std;
 #define PORT 4040 // port do laczenia sie
 #define MAXDATA 100
 
+struct polozenie {
+	int x;
+	int y;
+};
+
+
+void deserialize_int(unsigned char *buffer,polozenie &obiekt)
+{
+	obiekt.x= buffer[0]<<24;
+	obiekt.x= buffer[1]<<16;
+	obiekt.x = buffer[2]<<8;
+	obiekt.x = buffer[3];
+
+	obiekt.y= buffer[4]<<24;
+	obiekt.y= buffer[5]<<16;
+	obiekt.y = buffer[6]<<8;
+	obiekt.y = buffer[7];
+
+}
+
+int recv_struktura(int socket, polozenie &obiekt)
+{
+	unsigned char buffer[32];
+	int wartosc;
+	wartosc = recv(socket, buffer, 32, 0);
+	deserialize_int(buffer, obiekt);
+	return wartosc;
+}
 void klient_uruchomienie()
 {
 	int sockfd, numbytes;
@@ -55,8 +83,23 @@ void klient_uruchomienie()
 			cout<<"Polaczenie dziala"<<endl;
 		}
 
+		polozenie obiekt;
 		while(1)
 		{
+			if((numbytes = recv_struktura(sockfd, obiekt)) == -1)
+			{
+				cout<<"Blad recv()"<<endl;
+			}
+
+			if(numbytes == 0)
+			{
+				break;
+			}
+			else
+			{
+				cout<<"Polozenie x: "<<obiekt.x<<" Polozenie y: "<<obiekt.y<<endl;
+			}
+			/*
 			if((numbytes = recv(sockfd, buf, MAXDATA -1,0))== -1)
 			{
 				cout<<"Blad recv()"<<endl;
@@ -71,6 +114,7 @@ void klient_uruchomienie()
 				buf[numbytes] = '\0';
 				cout<<"Otrzymano: "<<buf<<endl;
 			}
+			*/
 		}
 
 		close(sockfd);
