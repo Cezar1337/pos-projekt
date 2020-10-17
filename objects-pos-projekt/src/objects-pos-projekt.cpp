@@ -63,18 +63,18 @@ unsigned char * serialize_int(unsigned char *buffer, int value_x, int value_y)
 }
 
 //serializacja struktury
-unsigned char * serialize_temp(unsigned char *buffer,  const polozenie *value)
+unsigned char * serialize_struktura(unsigned char *buffer,  const polozenie *value)
 {
   buffer = serialize_int(buffer, value->x, value->y); //wskaznik na buffer[3]
   return buffer;
 }
 
 //wysyłanie, kwestia czy chcemy dzialac na wskazniku, czy po prostu przez wartosc strukture do funkcji dac
-int send_temp(int socket, const  polozenie *obiekt)
+int send_struktura(int socket, const  polozenie *obiekt)
 {
   unsigned char buffer[32], *ptr;
 
-  ptr = serialize_temp(buffer, obiekt); //wskaznik na buffer[4]
+  ptr = serialize_struktura(buffer, obiekt); //wskaznik na buffer[8]
   //wersja z send
   return send (socket, buffer, ptr-buffer, 0); //prt-buffer zwróci liczbe
 }
@@ -150,12 +150,25 @@ void serwer_uruchomienie(){
 
 		//pytanie czy ten fork cały
 		close(sockfd);
-	/*	polozenie obiekt = stworzenie_struktury();
-		if(send_temp(new_fd,&obiekt) == -1)
+
+		polozenie obiekt = stworzenie_struktury();
+		int i=1;
+
+		while(1)
 		{
-			cout<<"Wysylanie blad"<<endl;
+			if(send_struktura(new_fd,&obiekt) == -1)
+			{
+				cout<<"Wysylanie blad"<<endl;
+			}
+			else
+			{
+				cout<<"Wyslano wiadomosc po raz: "<<i<<endl;
+				i++;
+				sleep(1);
+			}
 		}
-	*/
+
+	/*
 	int i = 1;
 	while(1)
 	{
@@ -172,7 +185,7 @@ void serwer_uruchomienie(){
 			sleep(1);
 		}
 	}
-
+	*/
 	close(new_fd);
 
 }
@@ -188,7 +201,7 @@ void *serwer(void * unused)
 int main () {
 
 	pthread_t watek;
-	pthread_create(&watek, NULL, serwer,(void *) NULL);
+	pthread_create(&watek, NULL, serwer, (void *) NULL);
 	pthread_exit(NULL);
 
 }
