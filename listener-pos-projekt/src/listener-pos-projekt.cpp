@@ -30,18 +30,44 @@ struct polozenie {
 };
 
 
-void deserialize_int(unsigned char *buffer,polozenie &obiekt)
+
+void deserialize_int(unsigned char *buf, polozenie &obiekt)
 {
-	obiekt.x= buffer[0]<<24;
-	obiekt.x= buffer[1]<<16;
-	obiekt.x = buffer[2]<<8;
-	obiekt.x = buffer[3];
+    unsigned long int i2 = ((unsigned long int)buf[0]<<24) |
+                           ((unsigned long int)buf[1]<<16) |
+                           ((unsigned long int)buf[2]<<8)  |
+                           buf[3];
+    long int i;
 
-	obiekt.y= buffer[4]<<24;
-	obiekt.y= buffer[5]<<16;
-	obiekt.y = buffer[6]<<8;
-	obiekt.y = buffer[7];
+    // change unsigned numbers to signed
+    if (i2 <= 0x7fffffffu)
+    {
+    	i = i2;
+    }
+    else
+    {
+    	i = -1 - (long int)(0xffffffffu - i2);
+    }
 
+    obiekt.x=i;
+
+    unsigned long int j2 = ((unsigned long int)buf[4]<<24) |
+                               ((unsigned long int)buf[5]<<16) |
+                               ((unsigned long int)buf[6]<<8)  |
+                               buf[7];
+        long int j;
+
+        // change unsigned numbers to signed
+        if (j2 <= 0x7fffffffu)
+        {
+        	j = j2;
+        }
+        else
+        {
+        	j = -1 - (long int)(0xffffffffu - j2);
+        }
+
+        obiekt.y=j;
 }
 
 int recv_struktura(int socket, polozenie &obiekt)
